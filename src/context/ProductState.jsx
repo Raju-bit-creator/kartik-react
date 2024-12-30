@@ -110,8 +110,35 @@ const ProductState = (props) => {
     setProduct(data);
   };
 
+  const editProduct = async (selectedProduct, updateData) => {
+    console.log("editing product ", selectedProduct);
+    const { title, description, price, instock } = updateData;
+    try {
+      const response = await fetch(
+        `http://localhos:5000/api/product/${selectedProduct}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+          body: JSON.stringify({ title, description, instock, price }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("fail to update");
+      }
+      const json = await response.json();
+      console.log(json);
+      allProduct();
+    } catch (error) {
+      throw new Error("fail to update");
+    }
+  };
   return (
-    <productContext.Provider value={{ product, allProduct, state, dispatch }}>
+    <productContext.Provider
+      value={{ product, allProduct, editProduct, state, dispatch }}
+    >
       {props.children}
     </productContext.Provider>
   );
