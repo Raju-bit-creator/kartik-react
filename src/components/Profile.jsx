@@ -58,8 +58,10 @@ const Profile = () => {
     product,
     allProduct,
     dispatch,
+    editProduct,
+    deleteProduct,
   } = context;
-  console.log("this is porducts", product);
+  console.log("this is porducts1111", product);
   // console.log("this is state", state);
   const [menuVisible, setMenuVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -87,7 +89,7 @@ const Profile = () => {
   const handleDelete = async (id) => {
     console.log("deleting product");
 
-    // await deleteProduct(id)
+    await deleteProduct(id);
   };
   useEffect(() => {
     // fetchData();

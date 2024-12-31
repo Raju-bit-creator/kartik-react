@@ -98,13 +98,16 @@ const ProductState = (props) => {
   });
 
   const allProduct = async () => {
-    const response = await fetch("", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("token"),
-      },
-    });
+    const response = await fetch(
+      "http://localhost:5000/api/product/getallproduct",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
     let data = await response.json();
     console.log(data);
     setProduct(data);
@@ -135,9 +138,35 @@ const ProductState = (props) => {
       throw new Error("fail to update");
     }
   };
+
+  const deleteProduct = async (id) => {
+    try {
+      const response = await fetch(`http://localhos:5000/api/product/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      });
+      if (response.ok) {
+        console.log("product deleted successfully");
+      } else {
+        console.error("failed to delete the product");
+      }
+    } catch (error) {
+      console.error("failed to delete the product");
+    }
+  };
   return (
     <productContext.Provider
-      value={{ product, allProduct, editProduct, state, dispatch }}
+      value={{
+        product,
+        allProduct,
+        editProduct,
+        deleteProduct,
+        state,
+        dispatch,
+      }}
     >
       {props.children}
     </productContext.Provider>

@@ -28,11 +28,15 @@ const AddProduct = () => {
       formData.append("myfile", product.image);
     }
     try {
-      const response = await axios.post("", formData, {
-        headers: {
-          "auth-token": localStorage.getItem("token"),
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/product/addproduct",
+        formData,
+        {
+          headers: {
+            "auth-token": localStorage.getItem("token"),
+          },
+        }
+      );
       console.log(response.data);
       setProduct({
         title: "",
@@ -126,3 +130,5 @@ const AddProduct = () => {
 };
 
 export default AddProduct;
+
+//CRUD operatin stands for create , read, update and delete
