@@ -14,6 +14,9 @@ app.get("/about-us", (req, res) => {
 app.get("/contact-us", (req, res) => {
   res.send("this is contact us page");
 });
+app.get("/contact-us", (req, res) => {
+  res.send("this is contact us page");
+});
 
 app.listen(port, () => {
   console.log(`api is listening on port: ${port}`);
