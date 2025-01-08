@@ -23,7 +23,7 @@ app.get("/chats/:id", (req, res) => {
   res.send(singleChat);
 });
 app.use("/api/auth", require("./routes/Auth"));
-// app.use("/api/product", require("./routes/product"));
+app.use("/api/product", require("./routes/Product"));
 
 app.listen(port, () => {
   console.log(`api is listening on port: ${port}`);
