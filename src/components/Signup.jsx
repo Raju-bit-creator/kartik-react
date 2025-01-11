@@ -12,22 +12,33 @@ const Signup = () => {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("form is submitted");
+    console.log("Form is submitted");
+
     const { name, email, password } = credential;
-    const response = await fetch("http://localhost:5000/api/auth/createuser", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, email, password }),
-    });
-    const json = await response.json();
-    console.log("this is response data", json);
-    if (json.success) {
-      localStorage.setItem("token", json.authToken);
-      navigate("/login");
-    } else {
-      alert("invalid credentials");
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/auth/createuser",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, email, password }),
+        }
+      );
+
+      const json = await response.json();
+      console.log("Response JSON: ", json);
+
+      if (response.ok && json.authToken) {
+        localStorage.setItem("token", json.authToken);
+        navigate("/login");
+      } else {
+        alert(json.message || "Invalid credentials");
+      }
+    } catch (error) {
+      console.error("Error during submission:", error);
+      alert("Something went wrong. Please try again later.");
     }
   };
 

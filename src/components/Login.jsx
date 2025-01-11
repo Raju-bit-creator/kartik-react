@@ -10,22 +10,26 @@ const Login = () => {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("form is submitted");
     const { email, password } = credential;
-    const response = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-    const json = await response.json();
-    console.log("this is response data", json);
-    if (json.success) {
-      localStorage.setItem("token", json.authToken);
-      navigate("/");
-    } else {
-      alert("invalid credentials");
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const json = await response.json();
+      console.log("Response data:", json);
+
+      if (json.success) {
+        localStorage.setItem("token", json.authToken);
+        navigate("/");
+      } else {
+        alert(json.message || "Invalid credentialsqqq");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
     }
   };
 

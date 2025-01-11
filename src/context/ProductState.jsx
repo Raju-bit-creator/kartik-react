@@ -91,7 +91,8 @@ const ProductState = (props) => {
     },
   ];
 
-  const [product, setProduct] = useState(products);
+  const [product, setProduct] = useState([]);
+  const [homeProduct, setHomeProduct] = useState([]);
   const [state, dispatch] = useReducer(cartReducer, {
     products: product,
     cart: [],
@@ -112,13 +113,28 @@ const ProductState = (props) => {
     console.log(data);
     setProduct(data);
   };
+  const allHomeProduct = async () => {
+    const response = await fetch(
+      "http://localhost:5000/api/product/gethomeproduct",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+    let data = await response.json();
+    console.log(data);
+    setHomeProduct(data);
+  };
 
   const editProduct = async (selectedProduct, updateData) => {
     console.log("editing product ", selectedProduct);
     const { title, description, price, instock } = updateData;
     try {
       const response = await fetch(
-        `http://localhos:5000/api/product/${selectedProduct}`,
+        `http://localhost:5000/api/product/updateproduct/${selectedProduct}`,
         {
           method: "PUT",
           headers: {
@@ -141,18 +157,22 @@ const ProductState = (props) => {
 
   const deleteProduct = async (id) => {
     try {
-      const response = await fetch(`http://localhos:5000/api/product/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("token"),
-        },
-      });
+      const response = await fetch(
+        `http://localhost:5000/api/product/deleteproduct/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        }
+      );
       if (response.ok) {
         console.log("product deleted successfully");
       } else {
         console.error("failed to delete the product");
       }
+      allProduct();
     } catch (error) {
       console.error("failed to delete the product");
     }
@@ -164,6 +184,8 @@ const ProductState = (props) => {
         allProduct,
         editProduct,
         deleteProduct,
+        homeProduct,
+        allHomeProduct,
         state,
         dispatch,
       }}
