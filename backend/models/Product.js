@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const productSchema = new Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "user",
   },
   title: {
     type: String,
@@ -21,6 +21,10 @@ const productSchema = new Schema({
   price: {
     type: Number,
     required: true,
+  },
+  images: {
+    type: [String],
+    required: false,
   },
   date: {
     type: Date,
